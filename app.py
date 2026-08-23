@@ -542,7 +542,6 @@ def umf_per_analisi(valori_form):
 
 
 st.markdown(CSS, unsafe_allow_html=True)
-_pwa(key="un1cum_pwa")
 _ICON_HTTP = (
     "https://raw.githubusercontent.com/anna290784/glazeformulationweb"
     "/main/static/un1cum-icon-v5.png?v=6"
@@ -731,7 +730,21 @@ components.html(
       }
     }, true);
   }
+  function hidePwaWarning() {
+    appDoc.querySelectorAll(
+      '[data-testid="stAlert"], [data-testid="stNotification"], [data-testid="stException"]'
+    ).forEach(function (el) {
+      const t = el.textContent || "";
+      if (t.indexOf("app.pwa") === -1 && t.indexOf("component frontend") === -1) return;
+      el.style.display = "none";
+      const box = el.closest(
+        "[data-testid='element-container'], [data-testid='stElementContainer'], .element-container"
+      );
+      if (box) box.style.display = "none";
+    });
+  }
   function scan() {
+    hidePwaWarning();
     appDoc.querySelectorAll(
       '[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input'
     ).forEach(bind);
