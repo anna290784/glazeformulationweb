@@ -598,9 +598,32 @@ components.html(
     if (el.getAttribute("name") !== name) el.setAttribute("name", name);
     if (el.getAttribute("content") !== content) el.setAttribute("content", content);
   }
+  function applyPwaManifest() {
+    const links = Array.from(brandRoot.head.querySelectorAll('link[rel="manifest"]'));
+    if (links.length === 0) {
+      ensureLink("ga-brand-manifest", "manifest", MANIFEST);
+      return;
+    }
+    if (links[0].getAttribute("href") !== MANIFEST) {
+      links[0].setAttribute("href", MANIFEST);
+    }
+    for (let i = 1; i < links.length; i++) {
+      links[i].parentNode.removeChild(links[i]);
+    }
+  }
+  function registerPwaWorker() {
+    try {
+      const win = brandRoot.defaultView;
+      if (!win || !win.navigator || !win.navigator.serviceWorker) return;
+      if (win.document.documentElement.dataset.gaPwaSw === "1") return;
+      win.document.documentElement.dataset.gaPwaSw = "1";
+      const swUrl = (onCloud ? "/~/+" : "") + "/component/app.pwa/sw.js";
+      win.navigator.serviceWorker.register(swUrl).catch(function () {});
+    } catch (err) {}
+  }
   function applyBrandIcons() {
     brandRoot.head.querySelectorAll(
-      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"], link[rel="manifest"]'
+      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"]'
     ).forEach(function (el) {
       if (String(el.id || "").startsWith("ga-brand-")) return;
       const h = String(el.getAttribute("href") || el.href || "");
@@ -618,7 +641,7 @@ components.html(
     ensureLink("ga-brand-favicon", "icon", ICON, {type: "image/png", sizes: "192x192"});
     ensureLink("ga-brand-512", "icon", ICON_512, {type: "image/png", sizes: "512x512"});
     ensureLink("ga-brand-apple", "apple-touch-icon", ICON, {sizes: "180x180"});
-    ensureLink("ga-brand-manifest", "manifest", MANIFEST);
+    applyPwaManifest();
     const sc = brandRoot.getElementById("favicon");
     if (sc) {
       sc.setAttribute("type", "image/png");
@@ -634,6 +657,7 @@ components.html(
     ensureMeta("ga-brand-apple-status", "apple-mobile-web-app-status-bar-style", "black-translucent");
   }
   applyBrandIcons();
+  registerPwaWorker();
   if (brandRoot.documentElement.dataset.gaBrandIcons !== "1") {
     brandRoot.documentElement.dataset.gaBrandIcons = "1";
     new MutationObserver(applyBrandIcons).observe(brandRoot.head, {
