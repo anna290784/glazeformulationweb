@@ -8,14 +8,19 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 
+import branding
 import engine as e
 import diagrammi as d
 importlib.reload(e)
 importlib.reload(d)
+branding.install()
+
+ROOT = Path(__file__).resolve().parent
+LOGO = ROOT / "logo_un1cum.png"
 
 st.set_page_config(
-    page_title="un1cum ceramica — Glaze Formulation Web",
-    page_icon="logo_un1cum.png",
+    page_title="Glaze Formulation Web",
+    page_icon=str(LOGO) if LOGO.is_file() else "●",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -79,7 +84,6 @@ elif isinstance(st.session_state.totale_necessario, (int, float)):
 
 MATERIE = st.session_state.materie
 NOMI_MATERIE = sorted(MATERIE.keys())
-LOGO = Path(__file__).resolve().parent / "logo_un1cum.png"
 
 CSS = """
 <style>
@@ -540,7 +544,84 @@ components.html(
 <script>
 (function () {
   const root = window.parent.document;
-  if (!root || root.documentElement.dataset.gaZeroScript === "1") return;
+  if (!root) return;
+
+  const ICON = "/app/static/un1cum-icon-v5.png";
+  const ICON_ICO = "/app/static/favicon.ico";
+  const ICON_PNG = "/app/static/favicon-32.png";
+  const APPLE = "/app/static/apple-touch-icon.png";
+  const MANIFEST = "/app/static/manifest.json";
+
+  function ensureLink(id, rel, href, extra) {
+    let el = root.getElementById(id);
+    if (!el) {
+      el = root.createElement("link");
+      el.id = id;
+      root.head.appendChild(el);
+    }
+    if (el.getAttribute("rel") !== rel) el.setAttribute("rel", rel);
+    if (el.getAttribute("href") !== href) el.setAttribute("href", href);
+    Object.keys(extra || {}).forEach(function (k) {
+      if (el.getAttribute(k) !== extra[k]) el.setAttribute(k, extra[k]);
+    });
+  }
+  function ensureMeta(id, name, content) {
+    let el = root.getElementById(id);
+    if (!el) {
+      el = root.createElement("meta");
+      el.id = id;
+      root.head.appendChild(el);
+    }
+    if (el.getAttribute("name") !== name) el.setAttribute("name", name);
+    if (el.getAttribute("content") !== content) el.setAttribute("content", content);
+  }
+  function isStreamlitDefault(href) {
+    const h = String(href || "");
+    if (h.indexOf("un1cum-icon-v5") !== -1) return false;
+    if (h.indexOf("/app/static/") !== -1) return false;
+    return h.indexOf("favicon.png") !== -1;
+  }
+  function applyBrandIcons() {
+    root.head.querySelectorAll(
+      'link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="manifest"]'
+    ).forEach(function (el) {
+      if (String(el.id || "").startsWith("ga-brand-")) return;
+      if (isStreamlitDefault(el.getAttribute("href"))) {
+        el.parentNode.removeChild(el);
+        return;
+      }
+      if (!String(el.id || "").startsWith("ga-brand-")) {
+        const href = String(el.getAttribute("href") || "");
+        if (href.indexOf("/app/static/") === -1) el.parentNode.removeChild(el);
+      }
+    });
+    ensureLink("ga-brand-shortcut", "shortcut icon", ICON, {type: "image/png"});
+    ensureLink("ga-brand-favicon-ico", "icon", ICON_ICO, {type: "image/x-icon"});
+    ensureLink("ga-brand-favicon-32", "icon", ICON_PNG, {type: "image/png", sizes: "32x32"});
+    ensureLink("ga-brand-favicon", "icon", ICON, {type: "image/png", sizes: "192x192"});
+    ensureLink("ga-brand-apple", "apple-touch-icon", APPLE, {sizes: "180x180"});
+    ensureLink("ga-brand-manifest", "manifest", MANIFEST);
+    const sc = root.getElementById("ga-brand-shortcut");
+    if (sc && isStreamlitDefault(sc.getAttribute("href"))) sc.setAttribute("href", ICON);
+    ensureMeta("ga-brand-theme", "theme-color", "#141418");
+    ensureMeta("ga-brand-appname", "application-name", "Glaze Formulation Web");
+    ensureMeta("ga-brand-apple-capable", "apple-mobile-web-app-capable", "yes");
+    ensureMeta("ga-brand-apple-title", "apple-mobile-web-app-title", "Glaze Formulation Web");
+    ensureMeta("ga-brand-mobile-capable", "mobile-web-app-capable", "yes");
+    ensureMeta("ga-brand-apple-status", "apple-mobile-web-app-status-bar-style", "black-translucent");
+  }
+  applyBrandIcons();
+  if (root.documentElement.dataset.gaBrandIcons !== "1") {
+    root.documentElement.dataset.gaBrandIcons = "1";
+    new MutationObserver(applyBrandIcons).observe(root.head, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["href", "rel"]
+    });
+  }
+
+  if (root.documentElement.dataset.gaZeroScript === "1") return;
   root.documentElement.dataset.gaZeroScript = "1";
   function isZero(raw) {
     const s = String(raw || "").trim().replace(",", ".");
