@@ -652,7 +652,13 @@ components.html(
     const n = Number(s);
     return Number.isFinite(n) && n === 0;
   }
+  function makeNumericKeyboard(el) {
+    el.setAttribute("inputmode", "decimal");
+    el.setAttribute("enterkeyhint", "done");
+    el.setAttribute("autocomplete", "off");
+  }
   function bind(el) {
+    makeNumericKeyboard(el);
     if (el.dataset.gaZero === "1") return;
     el.dataset.gaZero = "1";
     el.addEventListener("focus", function () {
