@@ -18,6 +18,7 @@ branding.install()
 
 ROOT = Path(__file__).resolve().parent
 LOGO = ROOT / "logo_un1cum.png"
+_pwa = components.declare_component("pwa", path=str(ROOT / "pwa"))
 
 st.set_page_config(
     page_title="Glaze Formulation Web",
@@ -110,6 +111,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 }
 [data-testid="stToolbar"] { display: none !important; }
 .stDeployButton, [data-testid="stStatusWidget"] { display: none !important; }
+iframe[title="app.pwa"] { display: none !important; height: 0 !important; }
 [data-testid="stSidebar"] { display: none !important; }
 .block-container {
     padding-top: 0.4rem !important;
@@ -540,6 +542,7 @@ def umf_per_analisi(valori_form):
 
 
 st.markdown(CSS, unsafe_allow_html=True)
+_pwa(key="un1cum_pwa")
 _ICON_HTTP = (
     "https://raw.githubusercontent.com/anna290784/glazeformulationweb"
     "/main/static/un1cum-icon-v5.png?v=6"
@@ -564,6 +567,8 @@ components.html(
   const ICON_ICO = """ + json.dumps(_ICON_ICO) + """;
   const ICON_32 = """ + json.dumps(_ICON_32) + """;
   const ICON_512 = """ + json.dumps(_ICON_512) + """;
+  const onCloud = /streamlit\\.app$/i.test(location.hostname);
+  const MANIFEST = (onCloud ? "/~/+" : "") + "/component/app.pwa/manifest.json";
   let brandRoot = null;
   try { brandRoot = window.top && window.top.document ? window.top.document : null; } catch (err) {}
   if (!brandRoot) brandRoot = window.parent.document;
@@ -595,7 +600,7 @@ components.html(
   }
   function applyBrandIcons() {
     brandRoot.head.querySelectorAll(
-      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"]'
+      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"], link[rel="manifest"]'
     ).forEach(function (el) {
       if (String(el.id || "").startsWith("ga-brand-")) return;
       const h = String(el.getAttribute("href") || el.href || "");
@@ -613,6 +618,7 @@ components.html(
     ensureLink("ga-brand-favicon", "icon", ICON, {type: "image/png", sizes: "192x192"});
     ensureLink("ga-brand-512", "icon", ICON_512, {type: "image/png", sizes: "512x512"});
     ensureLink("ga-brand-apple", "apple-touch-icon", ICON, {sizes: "180x180"});
+    ensureLink("ga-brand-manifest", "manifest", MANIFEST);
     const sc = brandRoot.getElementById("favicon");
     if (sc) {
       sc.setAttribute("type", "image/png");
