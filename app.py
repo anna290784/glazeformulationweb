@@ -569,6 +569,7 @@ components.html(
   const ICON_512 = """ + json.dumps(_ICON_512) + """;
   const onCloud = /streamlit\\.app$/i.test(location.hostname);
   const MANIFEST = (onCloud ? "/~/+" : "") + "/component/app.pwa/manifest.json";
+  const INSTALL_URL = "https://anna290784.github.io/glazeformulationweb/";
   let brandRoot = null;
   try { brandRoot = window.top && window.top.document ? window.top.document : null; } catch (err) {}
   if (!brandRoot) brandRoot = window.parent.document;
@@ -658,6 +659,38 @@ components.html(
   }
   applyBrandIcons();
   registerPwaWorker();
+  function showMobileInstall() {
+    try {
+      const win = brandRoot.defaultView;
+      if (!win) return;
+      const ua = win.navigator.userAgent || "";
+      if (!/Android|iPhone|iPad|iPod/i.test(ua)) return;
+      if (win.matchMedia && win.matchMedia("(display-mode: standalone)").matches) return;
+      if (win.navigator.standalone) return;
+      if (String(win.location.hostname || "").indexOf("github.io") !== -1) return;
+      if (brandRoot.getElementById("ga-install-bar")) return;
+      const bar = brandRoot.createElement("div");
+      bar.id = "ga-install-bar";
+      bar.innerHTML = '<a href="' + INSTALL_URL + '">Installa l\\'app sul telefono</a>';
+      const st = bar.style;
+      st.position = "fixed";
+      st.left = "0";
+      st.right = "0";
+      st.bottom = "0";
+      st.zIndex = "99999";
+      st.background = "#1E1E26";
+      st.borderTop = "1px solid #3A3A48";
+      st.textAlign = "center";
+      st.padding = "10px 12px calc(10px + env(safe-area-inset-bottom))";
+      const link = bar.querySelector("a");
+      link.style.color = "#FF7A4E";
+      link.style.fontWeight = "700";
+      link.style.fontSize = "15px";
+      link.style.textDecoration = "none";
+      brandRoot.body.appendChild(bar);
+    } catch (err) {}
+  }
+  showMobileInstall();
   if (brandRoot.documentElement.dataset.gaBrandIcons !== "1") {
     brandRoot.documentElement.dataset.gaBrandIcons = "1";
     new MutationObserver(applyBrandIcons).observe(brandRoot.head, {
