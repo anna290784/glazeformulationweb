@@ -1,0 +1,42 @@
+{
+  "Feldspato": {
+    "formula": "KNaO · 1.15Al2O3 · 7.9SiO2",
+    "pm": 675,
+    "seger": {"KNaO": 1, "Al2O3": 1.15, "SiO2": 7.9}
+  },
+  "Caolino": {
+    "formula": "Al2O3 · 2.17SiO2",
+    "pm": 274,
+    "seger": {"Al2O3": 1, "SiO2": 2.17}
+  },
+  "Marmo": {
+    "formula": "CaCO3",
+    "pm": 100,
+    "seger": {"CaO": 1}
+  },
+  "Wollastonite": {
+    "formula": "CaO · SiO2",
+    "pm": 116,
+    "seger": {"CaO": 1, "SiO2": 1}
+  },
+  "Dolomite": {
+    "formula": "CaCO3 · MgCO3",
+    "pm": 184,
+    "seger": {"CaO": 1, "MgO": 1}
+  },
+  "Talco": {
+    "formula": "MgO · 1.2SiO2",
+    "pm": 125,
+    "seger": {"MgO": 1, "SiO2": 1.2}
+  },
+  "Carbonato di Magnesio": {
+    "formula": "MgCO3",
+    "pm": 84.31,
+    "seger": {"MgO": 1}
+  },
+  "Quarzo": {
+    "formula": "SiO2",
+    "pm": 60,
+    "seger": {"SiO2": 1}
+  }
+}
