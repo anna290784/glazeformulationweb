@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib
+import json
 from pathlib import Path
 
 import streamlit as st
@@ -17,6 +18,15 @@ branding.install()
 
 ROOT = Path(__file__).resolve().parent
 LOGO = ROOT / "logo_un1cum.png"
+
+
+def _icon_data_uri() -> str:
+    import base64
+    for name in ("un1cum-icon-v5.png", "icon-192-any.png", "favicon-32.png"):
+        p = ROOT / "static" / name
+        if p.is_file():
+            return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode("ascii")
+    return ""
 
 st.set_page_config(
     page_title="Glaze Formulation Web",
@@ -539,25 +549,24 @@ def umf_per_analisi(valori_form):
 
 
 st.markdown(CSS, unsafe_allow_html=True)
+_ICON_DATA = _icon_data_uri()
 components.html(
     """
 <script>
 (function () {
-  const root = window.parent.document;
-  if (!root) return;
-
-  const ICON = "/app/static/un1cum-icon-v5.png";
-  const ICON_ICO = "/app/static/favicon.ico";
-  const ICON_PNG = "/app/static/favicon-32.png";
-  const APPLE = "/app/static/apple-touch-icon.png";
-  const MANIFEST = "/app/static/manifest.json";
+  const ICON = """ + json.dumps(_ICON_DATA) + """;
+  let brandRoot = null;
+  try { brandRoot = window.top && window.top.document ? window.top.document : null; } catch (err) {}
+  if (!brandRoot) brandRoot = window.parent.document;
+  const appDoc = window.parent.document;
+  if (!brandRoot) return;
 
   function ensureLink(id, rel, href, extra) {
-    let el = root.getElementById(id);
+    let el = brandRoot.getElementById(id);
     if (!el) {
-      el = root.createElement("link");
+      el = brandRoot.createElement("link");
       el.id = id;
-      root.head.appendChild(el);
+      brandRoot.head.appendChild(el);
     }
     if (el.getAttribute("rel") !== rel) el.setAttribute("rel", rel);
     if (el.getAttribute("href") !== href) el.setAttribute("href", href);
@@ -566,43 +575,44 @@ components.html(
     });
   }
   function ensureMeta(id, name, content) {
-    let el = root.getElementById(id);
+    let el = brandRoot.getElementById(id);
     if (!el) {
-      el = root.createElement("meta");
+      el = brandRoot.createElement("meta");
       el.id = id;
-      root.head.appendChild(el);
+      brandRoot.head.appendChild(el);
     }
     if (el.getAttribute("name") !== name) el.setAttribute("name", name);
     if (el.getAttribute("content") !== content) el.setAttribute("content", content);
   }
-  function isStreamlitDefault(href) {
+  function isHostDefault(href) {
     const h = String(href || "");
-    if (h.indexOf("un1cum-icon-v5") !== -1) return false;
-    if (h.indexOf("/app/static/") !== -1) return false;
-    return h.indexOf("favicon.png") !== -1;
+    if (!h || h.indexOf("data:image") === 0) return false;
+    return (
+      h.indexOf("/-/build/favicon") !== -1 ||
+      h.indexOf("favicon_256") !== -1 ||
+      h.indexOf("favicon.svg") !== -1 ||
+      h.indexOf("favicon.ico") !== -1 ||
+      h.indexOf("./favicon.png") !== -1 ||
+      h.indexOf("favicon.png") !== -1
+    );
   }
   function applyBrandIcons() {
-    root.head.querySelectorAll(
-      'link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="manifest"]'
+    if (!ICON) return;
+    brandRoot.head.querySelectorAll(
+      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"]'
     ).forEach(function (el) {
       if (String(el.id || "").startsWith("ga-brand-")) return;
-      if (isStreamlitDefault(el.getAttribute("href"))) {
-        el.parentNode.removeChild(el);
-        return;
-      }
-      if (!String(el.id || "").startsWith("ga-brand-")) {
-        const href = String(el.getAttribute("href") || "");
-        if (href.indexOf("/app/static/") === -1) el.parentNode.removeChild(el);
+      if (isHostDefault(el.getAttribute("href") || el.href)) {
+        el.setAttribute("href", ICON);
       }
     });
     ensureLink("ga-brand-shortcut", "shortcut icon", ICON, {type: "image/png"});
-    ensureLink("ga-brand-favicon-ico", "icon", ICON_ICO, {type: "image/x-icon"});
-    ensureLink("ga-brand-favicon-32", "icon", ICON_PNG, {type: "image/png", sizes: "32x32"});
     ensureLink("ga-brand-favicon", "icon", ICON, {type: "image/png", sizes: "192x192"});
-    ensureLink("ga-brand-apple", "apple-touch-icon", APPLE, {sizes: "180x180"});
-    ensureLink("ga-brand-manifest", "manifest", MANIFEST);
-    const sc = root.getElementById("ga-brand-shortcut");
-    if (sc && isStreamlitDefault(sc.getAttribute("href"))) sc.setAttribute("href", ICON);
+    ensureLink("ga-brand-apple", "apple-touch-icon", ICON, {sizes: "180x180"});
+    const sc = brandRoot.getElementById("favicon");
+    if (sc) sc.setAttribute("href", ICON);
+    const alt = brandRoot.getElementById("alternate-favicon");
+    if (alt) alt.setAttribute("href", ICON);
     ensureMeta("ga-brand-theme", "theme-color", "#141418");
     ensureMeta("ga-brand-appname", "application-name", "Glaze Formulation Web");
     ensureMeta("ga-brand-apple-capable", "apple-mobile-web-app-capable", "yes");
@@ -611,9 +621,9 @@ components.html(
     ensureMeta("ga-brand-apple-status", "apple-mobile-web-app-status-bar-style", "black-translucent");
   }
   applyBrandIcons();
-  if (root.documentElement.dataset.gaBrandIcons !== "1") {
-    root.documentElement.dataset.gaBrandIcons = "1";
-    new MutationObserver(applyBrandIcons).observe(root.head, {
+  if (brandRoot.documentElement.dataset.gaBrandIcons !== "1") {
+    brandRoot.documentElement.dataset.gaBrandIcons = "1";
+    new MutationObserver(applyBrandIcons).observe(brandRoot.head, {
       childList: true,
       subtree: true,
       attributes: true,
@@ -621,8 +631,8 @@ components.html(
     });
   }
 
-  if (root.documentElement.dataset.gaZeroScript === "1") return;
-  root.documentElement.dataset.gaZeroScript = "1";
+  if (!appDoc || appDoc.documentElement.dataset.gaZeroScript === "1") return;
+  appDoc.documentElement.dataset.gaZeroScript = "1";
   function isZero(raw) {
     const s = String(raw || "").trim().replace(",", ".");
     if (s === "" || s === "." || s === "-") return false;
@@ -646,12 +656,12 @@ components.html(
     }, true);
   }
   function scan() {
-    root.querySelectorAll(
+    appDoc.querySelectorAll(
       '[data-testid="stTextInput"] input, [data-testid="stNumberInput"] input'
     ).forEach(bind);
   }
   scan();
-  new MutationObserver(scan).observe(root.body, {childList: true, subtree: true});
+  new MutationObserver(scan).observe(appDoc.body, {childList: true, subtree: true});
 })();
 </script>
 """,
