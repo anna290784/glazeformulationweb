@@ -19,15 +19,6 @@ branding.install()
 ROOT = Path(__file__).resolve().parent
 LOGO = ROOT / "logo_un1cum.png"
 
-
-def _icon_data_uri() -> str:
-    import base64
-    for name in ("un1cum-icon-v5.png", "icon-192-any.png", "favicon-32.png"):
-        p = ROOT / "static" / name
-        if p.is_file():
-            return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode("ascii")
-    return ""
-
 st.set_page_config(
     page_title="Glaze Formulation Web",
     page_icon=str(LOGO) if LOGO.is_file() else "●",
@@ -549,12 +540,30 @@ def umf_per_analisi(valori_form):
 
 
 st.markdown(CSS, unsafe_allow_html=True)
-_ICON_DATA = _icon_data_uri()
+_ICON_HTTP = (
+    "https://raw.githubusercontent.com/anna290784/glazeformulationweb"
+    "/main/static/un1cum-icon-v5.png?v=6"
+)
+_ICON_ICO = (
+    "https://raw.githubusercontent.com/anna290784/glazeformulationweb"
+    "/main/static/favicon.ico?v=6"
+)
+_ICON_32 = (
+    "https://raw.githubusercontent.com/anna290784/glazeformulationweb"
+    "/main/static/favicon-32.png?v=6"
+)
+_ICON_512 = (
+    "https://raw.githubusercontent.com/anna290784/glazeformulationweb"
+    "/main/static/icon-512-any.png?v=6"
+)
 components.html(
     """
 <script>
 (function () {
-  const ICON = """ + json.dumps(_ICON_DATA) + """;
+  const ICON = """ + json.dumps(_ICON_HTTP) + """;
+  const ICON_ICO = """ + json.dumps(_ICON_ICO) + """;
+  const ICON_32 = """ + json.dumps(_ICON_32) + """;
+  const ICON_512 = """ + json.dumps(_ICON_512) + """;
   let brandRoot = null;
   try { brandRoot = window.top && window.top.document ? window.top.document : null; } catch (err) {}
   if (!brandRoot) brandRoot = window.parent.document;
@@ -584,35 +593,33 @@ components.html(
     if (el.getAttribute("name") !== name) el.setAttribute("name", name);
     if (el.getAttribute("content") !== content) el.setAttribute("content", content);
   }
-  function isHostDefault(href) {
-    const h = String(href || "");
-    if (!h || h.indexOf("data:image") === 0) return false;
-    return (
-      h.indexOf("/-/build/favicon") !== -1 ||
-      h.indexOf("favicon_256") !== -1 ||
-      h.indexOf("favicon.svg") !== -1 ||
-      h.indexOf("favicon.ico") !== -1 ||
-      h.indexOf("./favicon.png") !== -1 ||
-      h.indexOf("favicon.png") !== -1
-    );
-  }
   function applyBrandIcons() {
-    if (!ICON) return;
     brandRoot.head.querySelectorAll(
-      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"]'
+      'link[rel="icon"], link[rel="shortcut icon"], link[rel="alternate icon"], link[rel="apple-touch-icon"], link[rel="mask-icon"]'
     ).forEach(function (el) {
       if (String(el.id || "").startsWith("ga-brand-")) return;
-      if (isHostDefault(el.getAttribute("href") || el.href)) {
-        el.setAttribute("href", ICON);
+      const h = String(el.getAttribute("href") || el.href || "");
+      if (
+        h.indexOf("/-/build/") !== -1 ||
+        h.indexOf("favicon_safari") !== -1 ||
+        h.indexOf("favicon.svg") !== -1
+      ) {
+        el.parentNode.removeChild(el);
       }
     });
     ensureLink("ga-brand-shortcut", "shortcut icon", ICON, {type: "image/png"});
+    ensureLink("ga-brand-ico", "icon", ICON_ICO, {type: "image/x-icon", sizes: "any"});
+    ensureLink("ga-brand-32", "icon", ICON_32, {type: "image/png", sizes: "32x32"});
     ensureLink("ga-brand-favicon", "icon", ICON, {type: "image/png", sizes: "192x192"});
+    ensureLink("ga-brand-512", "icon", ICON_512, {type: "image/png", sizes: "512x512"});
     ensureLink("ga-brand-apple", "apple-touch-icon", ICON, {sizes: "180x180"});
     const sc = brandRoot.getElementById("favicon");
-    if (sc) sc.setAttribute("href", ICON);
+    if (sc) {
+      sc.setAttribute("type", "image/png");
+      sc.setAttribute("href", ICON);
+    }
     const alt = brandRoot.getElementById("alternate-favicon");
-    if (alt) alt.setAttribute("href", ICON);
+    if (alt) alt.setAttribute("href", ICON_ICO);
     ensureMeta("ga-brand-theme", "theme-color", "#141418");
     ensureMeta("ga-brand-appname", "application-name", "Glaze Formulation Web");
     ensureMeta("ga-brand-apple-capable", "apple-mobile-web-app-capable", "yes");
