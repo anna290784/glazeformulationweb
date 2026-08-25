@@ -1014,10 +1014,8 @@ with col_ric:
             st.markdown(
                 f'<p class="ga-mono-dim">  {stato_d.get("info", "—")}</p>',
                 unsafe_allow_html=True)
-        fig = d.disegna_diagramma(stato_d, compatto=True)
-        c_diag, _ = st.columns([0.78, 0.22])
-        with c_diag:
-            st.pyplot(fig, width="content", clear_figure=True)
+        fig = d.disegna_diagramma(stato_d, compatto=False)
+        st.pyplot(fig, width="stretch", clear_figure=True)
 
 if st.session_state.errore:
     st.session_state.status = st.session_state.errore

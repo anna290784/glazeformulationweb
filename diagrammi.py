@@ -19,30 +19,34 @@ _INDICE = None
 _ZONE = None
 _ZONE_REF = None
 
-FREER_ZONES_MANUAL = {
-    1: [
-        [0.00, 1.50], [0.30, 1.50], [0.36, 1.95], [0.44, 2.45], [0.48, 3.00], [0.00, 2.00],
-    ],
-    19: [
-        [0.05, 2.50], [0.85, 7.10], [0.65, 6.00], [0.45, 4.00], [0.35, 2.50],
-        [0.40, 1.00], [0.15, 1.00], [0.05, 2.50],
-    ],
-    25: [
-        [0.00, 2.50], [0.85, 8.50], [0.72, 6.70], [0.58, 5.10], [0.47, 4.10],
-        [0.35, 3.00], [0.43, 2.30], [0.56, 1.90], [0.68, 1.50], [0.42, 1.50], [0.00, 2.20],
-    ],
-    33: [
-        [0.00, 3.00], [1.05, 9.80], [1.05, 8.80], [0.65, 3.80],
-        [0.95, 1.80], [0.85, 1.50], [0.00, 1.50],
-    ],
-    40: [
-        [0.40, 7.00], [0.85, 11.80], [0.80, 8.50], [0.70, 7.00],
-    ],
-    60: [
-        [0.00, 5.50], [1.45, 17.50], [1.05, 3.00], [1.00, 3.00],
-        [0.80, 2.50], [0.60, 1.50], [0.00, 1.50],
-    ],
-}
+_DANIEL_VIEW_STD = {"al_max": 1.0, "si_max": 8.5, "si_min": 0.0, "al_min": 0.0}
+_DANIEL_VIEW_OVERRIDES = {n: dict(_DANIEL_VIEW_STD) for n in range(1, 61)}
+FREER_ZONES_MANUAL: dict[int, list] = {}
+
+
+def _load_calibration():
+    """Carica vertici e viste calibrate (allineate al desktop Glaze AI)."""
+    cal_path = BASE_DIR / "_screenshot_calibration.json"
+    if not cal_path.is_file():
+        return
+    try:
+        data = json.loads(cal_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    for item in data:
+        n = int(item["n"])
+        verts = item.get("vertices") or []
+        if len(verts) >= 3:
+            FREER_ZONES_MANUAL[n] = verts
+        _DANIEL_VIEW_OVERRIDES[n] = {
+            "al_max": float(item.get("al_max", 1.0)),
+            "si_max": float(item.get("si_max", 8.5)),
+            "si_min": float(item.get("si_min", 0.0)),
+            "al_min": float(item.get("al_min", 0.0)),
+        }
+
+
+_load_calibration()
 
 FREER_WEDGE_ANCHORS = [
     {"kna": 0.0, "ca": 1.0, "mg": 0.0,
@@ -328,26 +332,53 @@ def genera_zona(meta):
     return _build_daniel_wedge(p, al_max, si_max)
 
 
+def _applica_vista_diagramma(meta):
+    if not meta:
+        return meta
+    try:
+        n = int(meta.get("n", 0) or 0)
+    except (TypeError, ValueError):
+        return meta
+    ov = _DANIEL_VIEW_OVERRIDES.get(n)
+    if not ov:
+        return meta
+    out = dict(meta)
+    out.update(ov)
+    return out
+
+
 def carica_zona(meta):
     if not meta:
         return []
+    meta = _applica_vista_diagramma(dict(meta))
     n = int(meta.get("n", 0) or 0)
     al_max = float(meta.get("al_max", 1.0))
     si_max = float(meta.get("si_max", 10.0))
+
+    def _finalize(zone):
+        zone = [_clip_pt(al, si, al_max, si_max) for al, si in zone]
+        if n in (1, 21):
+            return zone
+        return _densify_ring(zone, steps=10)
+
+    if n in FREER_ZONES_MANUAL and len(FREER_ZONES_MANUAL[n]) >= 3:
+        return _finalize(FREER_ZONES_MANUAL[n])
+
+    refs = carica_zone_ref()
+    if n in refs and len(refs[n]) >= 3:
+        return _finalize(refs[n])
+
     ref_n, ref_zone = _trova_zona_ref_vicina(meta)
     if ref_zone and len(ref_zone) >= 3:
         idx = {item["n"]: item for item in carica_indice()}
         meta_src = idx.get(ref_n, meta)
         zone = _adatta_zona_scala(ref_zone, meta_src, meta)
-        zone = [_clip_pt(al, si, al_max, si_max) for al, si in zone]
-        return _densify_ring(zone, steps=10)
-    if n in FREER_ZONES_MANUAL:
-        zone = [_clip_pt(al, si, al_max, si_max) for al, si in FREER_ZONES_MANUAL[n]]
-        return _densify_ring(zone, steps=10)
+        return _finalize(zone)
+
     z = carica_zone().get(str(n)) or []
     if z and len(z) >= 4 and _zona_plausibile(z, meta):
-        return _densify_ring(z, steps=10)
-    return _densify_ring(genera_zona(meta), steps=10)
+        return _finalize(z)
+    return _finalize(genera_zona(meta))
 
 
 def punto_in_zona(zone, al, si):
@@ -381,6 +412,8 @@ def stato_diagramma(umf):
     """Seleziona carta, zona e punto dalla formula UMF."""
     prof = profilo_diagramma_daniel(umf)
     meta = trova_diagramma(prof)
+    if meta:
+        meta = _applica_vista_diagramma(meta)
     al = float((umf or {}).get("Al2O3", 0) or 0)
     si = float((umf or {}).get("SiO2", 0) or 0)
     if not meta:
@@ -404,15 +437,15 @@ def stato_diagramma(umf):
 
 
 def disegna_diagramma(stato, compatto=True):
-    """Figura scura come la carta Daniel del desktop."""
+    """Figura scura come la carta Daniel del desktop (SiO2 orizz., Al2O3 vert.)."""
     if compatto:
-        fig, ax = plt.subplots(figsize=(3.8, 3.5), dpi=100)
-        fs_tick, fs_lab, fs_title, fs_empty = 6.5, 8, 9, 9
-        ms_dot, ms_pt = 3.2, (10, 6.5, 3.5)
-        pad_title = 4
+        fig, ax = plt.subplots(figsize=(4.8, 4.2), dpi=110)
+        fs_tick, fs_lab, fs_title, fs_empty = 9, 11, 11, 11
+        ms_dot, ms_pt = 3.8, (11, 7.5, 4.0)
+        pad_title = 6
     else:
-        fig, ax = plt.subplots(figsize=(6.4, 5.6), dpi=110)
-        fs_tick, fs_lab, fs_title, fs_empty = 8, 10, 11, 12
+        fig, ax = plt.subplots(figsize=(6.8, 5.8), dpi=120)
+        fs_tick, fs_lab, fs_title, fs_empty = 10, 12, 12, 13
         ms_dot, ms_pt = 6, (14, 9, 5)
         pad_title = 8
     fig.patch.set_facecolor("#2A2A31")
@@ -430,43 +463,47 @@ def disegna_diagramma(stato, compatto=True):
 
     al_max = float(meta.get("al_max", 1.0))
     si_max = float(meta.get("si_max", 10.0))
-    ax.set_xlim(0, al_max)
-    ax.set_ylim(0, si_max)
-    ax.set_aspect(al_max / si_max * 0.92)
+    al_min = float(meta.get("al_min", 0.0))
+    si_min = float(meta.get("si_min", 0.0))
+    span_al = max(al_max - al_min, 0.05)
+    span_si = max(si_max - si_min, 0.5)
+    ax.set_xlim(si_min, si_max)
+    ax.set_ylim(al_min, al_max)
+    ax.set_aspect(span_si / span_al * 0.92)
 
-    al_minor, si_minor = 0.05, 0.5
-    al_major, si_major = 0.2, 2.0
-    ax.set_xticks(np.arange(0, al_max + 1e-6, al_minor), minor=True)
-    ax.set_yticks(np.arange(0, si_max + 1e-6, si_minor), minor=True)
-    ax.set_xticks(np.arange(0, al_max + 1e-6, al_major))
-    ax.set_yticks(np.arange(0, si_max + 1e-6, si_major))
+    al_minor, al_major = 0.05, (0.2 if al_max > 0.6 else 0.1)
+    si_minor, si_major = 0.5, (2.0 if si_max > 6 else 1.0)
+    ax.set_xticks(np.arange(si_min, si_max + 1e-6, si_minor), minor=True)
+    ax.set_yticks(np.arange(al_min, al_max + 1e-6, al_minor), minor=True)
+    ax.set_xticks(np.arange(si_min, si_max + 1e-6, si_major))
+    ax.set_yticks(np.arange(al_min, al_max + 1e-6, al_major))
     ax.grid(True, which="minor", color="#38383F", linewidth=0.45)
     ax.grid(True, which="major", color="#4C4C56", linewidth=0.7)
-    ax.tick_params(colors="#F1F1F2", labelsize=fs_tick, length=3)
+    ax.tick_params(colors="#F1F1F2", labelsize=fs_tick, length=4)
     for sp in ax.spines.values():
         sp.set_color("#F1F1F2")
         sp.set_linewidth(1.2)
-    ax.set_xlabel("Al2O3", color="#F1F1F2", fontsize=fs_lab, fontweight="bold")
-    ax.set_ylabel("SiO2", color="#F1F1F2", fontsize=fs_lab, fontweight="bold")
+    ax.set_xlabel("SiO2", color="#F1F1F2", fontsize=fs_lab, fontweight="bold")
+    ax.set_ylabel("Al2O3", color="#F1F1F2", fontsize=fs_lab, fontweight="bold")
 
     zone = stato.get("zone") or []
     if len(zone) >= 3:
         poly = Polygon(
-            [(p[0], p[1]) for p in zone],
+            [(p[1], p[0]) for p in zone],
             closed=True, facecolor="#3A3A42", edgecolor="none", zorder=2)
         ax.add_patch(poly)
         closed = zone + [zone[0]]
         segs = []
         step = 0.11 if compatto else 0.08
         for i in range(len(closed) - 1):
-            x0, y0 = closed[i]
-            x1, y1 = closed[i + 1]
-            dx, dy = x1 - x0, y1 - y0
+            al0, si0 = closed[i]
+            al1, si1 = closed[i + 1]
+            dx, dy = si1 - si0, al1 - al0
             length = (dx * dx + dy * dy) ** 0.5
             steps = max(1, int(length / step))
             for j in range(steps + 1):
                 t = j / steps
-                segs.append((x0 + dx * t, y0 + dy * t))
+                segs.append((si0 + dx * t, al0 + dy * t))
         if segs:
             xs, ys = zip(*segs)
             ax.scatter(xs, ys, s=ms_dot, c="#F1F1F2", zorder=3, linewidths=0)
@@ -474,15 +511,15 @@ def disegna_diagramma(stato, compatto=True):
     al, si = float(stato.get("al") or 0), float(stato.get("si") or 0)
     if al > 0 or si > 0:
         in_z = bool(stato.get("in_zona"))
-        ax.plot(al, si, "o", ms=ms_pt[0], mfc="#5A5A64", mec="none", zorder=5)
-        ax.plot(al, si, "o", ms=ms_pt[1], mfc="#8A8A93", mec="none", zorder=6)
-        ax.plot(al, si, "o", ms=ms_pt[2], mfc="#FFFFFF", mec="#2A2A31", mew=1.1, zorder=7)
+        ax.plot(si, al, "o", ms=ms_pt[0], mfc="#5A5A64", mec="none", zorder=5)
+        ax.plot(si, al, "o", ms=ms_pt[1], mfc="#8A8A93", mec="none", zorder=6)
+        ax.plot(si, al, "o", ms=ms_pt[2], mfc="#FFFFFF", mec="#2A2A31", mew=1.1, zorder=7)
         stato_txt = "in zona" if in_z else "fuori zona"
         ax.annotate(
             f"Al={al:.2f}  Si={si:.2f}\n{stato_txt}",
-            xy=(al, si), xytext=(8, 8), textcoords="offset points",
+            xy=(si, al), xytext=(10, 10), textcoords="offset points",
             color="#F1F1F2", fontsize=fs_tick,
-            bbox=dict(boxstyle="round,pad=0.2", fc="#35353C",
+            bbox=dict(boxstyle="round,pad=0.25", fc="#35353C",
                       ec="#F1F1F2" if in_z else "#6A6A72", lw=0.8),
             zorder=8,
         )

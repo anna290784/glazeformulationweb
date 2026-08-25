@@ -8,7 +8,9 @@
     "pos": "top",
     "file": "diagram_01.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 2,
@@ -19,7 +21,9 @@
     "pos": "top",
     "file": "diagram_02.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 3,
@@ -30,7 +34,9 @@
     "pos": "bottom",
     "file": "diagram_03.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 4,
@@ -41,7 +47,9 @@
     "pos": "top",
     "file": "diagram_04.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 5,
@@ -52,7 +60,9 @@
     "pos": "bottom",
     "file": "diagram_05.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 6,
@@ -63,7 +73,9 @@
     "pos": "top",
     "file": "diagram_06.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 7,
@@ -74,7 +86,9 @@
     "pos": "bottom",
     "file": "diagram_07.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 8,
@@ -85,7 +99,9 @@
     "pos": "top",
     "file": "diagram_08.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 9,
@@ -96,7 +112,9 @@
     "pos": "bottom",
     "file": "diagram_09.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 10,
@@ -107,7 +125,9 @@
     "pos": "top",
     "file": "diagram_10.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 11,
@@ -118,7 +138,9 @@
     "pos": "bottom",
     "file": "diagram_11.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 12,
@@ -129,7 +151,9 @@
     "pos": "top",
     "file": "diagram_12.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 13,
@@ -140,7 +164,9 @@
     "pos": "bottom",
     "file": "diagram_13.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 14,
@@ -151,7 +177,9 @@
     "pos": "top",
     "file": "diagram_14.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 15,
@@ -162,7 +190,9 @@
     "pos": "bottom",
     "file": "diagram_15.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 16,
@@ -173,7 +203,9 @@
     "pos": "top",
     "file": "diagram_16.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 17,
@@ -184,7 +216,9 @@
     "pos": "bottom",
     "file": "diagram_17.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 18,
@@ -195,7 +229,9 @@
     "pos": "top",
     "file": "diagram_18.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 19,
@@ -206,7 +242,9 @@
     "pos": "bottom",
     "file": "diagram_19.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 20,
@@ -217,7 +255,9 @@
     "pos": "top",
     "file": "diagram_20.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 21,
@@ -228,7 +268,9 @@
     "pos": "bottom",
     "file": "diagram_21.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 22,
@@ -239,7 +281,9 @@
     "pos": "top",
     "file": "diagram_22.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 23,
@@ -250,7 +294,9 @@
     "pos": "bottom",
     "file": "diagram_23.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 24,
@@ -261,7 +307,9 @@
     "pos": "top",
     "file": "diagram_24.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 25,
@@ -272,7 +320,9 @@
     "pos": "bottom",
     "file": "diagram_25.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 26,
@@ -283,7 +333,9 @@
     "pos": "top",
     "file": "diagram_26.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 27,
@@ -294,7 +346,9 @@
     "pos": "bottom",
     "file": "diagram_27.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 28,
@@ -305,7 +359,9 @@
     "pos": "top",
     "file": "diagram_28.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 29,
@@ -316,7 +372,9 @@
     "pos": "bottom",
     "file": "diagram_29.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 30,
@@ -327,7 +385,9 @@
     "pos": "top",
     "file": "diagram_30.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 31,
@@ -338,7 +398,9 @@
     "pos": "bottom",
     "file": "diagram_31.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 32,
@@ -349,7 +411,9 @@
     "pos": "top",
     "file": "diagram_32.png",
     "al_max": 1.0,
-    "si_max": 10.0
+    "si_max": 8.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 33,
@@ -359,8 +423,10 @@
     "page": 19,
     "pos": "top",
     "file": "diagram_33.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.1,
+    "si_max": 10.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 34,
@@ -370,8 +436,10 @@
     "page": 20,
     "pos": "top",
     "file": "diagram_34.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.1,
+    "si_max": 11.5,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 35,
@@ -381,8 +449,10 @@
     "page": 21,
     "pos": "top",
     "file": "diagram_35.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.1,
+    "si_max": 11.0,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 36,
@@ -392,8 +462,10 @@
     "page": 22,
     "pos": "top",
     "file": "diagram_36.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.1,
+    "si_max": 9.0,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 37,
@@ -403,8 +475,10 @@
     "page": 22,
     "pos": "bottom",
     "file": "diagram_37.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.1,
+    "si_max": 9.0,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 38,
@@ -414,8 +488,10 @@
     "page": 23,
     "pos": "top",
     "file": "diagram_38.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.0,
+    "si_max": 9.0,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 39,
@@ -425,8 +501,10 @@
     "page": 24,
     "pos": "top",
     "file": "diagram_39.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.0,
+    "si_max": 8.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 40,
@@ -436,8 +514,10 @@
     "page": 25,
     "pos": "top",
     "file": "diagram_40.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.1,
+    "si_max": 12.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 41,
@@ -447,8 +527,10 @@
     "page": 26,
     "pos": "top",
     "file": "diagram_41.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.2,
+    "si_max": 12.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 42,
@@ -458,8 +540,10 @@
     "page": 27,
     "pos": "top",
     "file": "diagram_42.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.2,
+    "si_max": 12.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 43,
@@ -469,8 +553,10 @@
     "page": 28,
     "pos": "top",
     "file": "diagram_43.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.2,
+    "si_max": 12.0,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 44,
@@ -480,8 +566,10 @@
     "page": 29,
     "pos": "top",
     "file": "diagram_44.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.0,
+    "si_max": 10.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 45,
@@ -491,8 +579,10 @@
     "page": 30,
     "pos": "top",
     "file": "diagram_45.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.0,
+    "si_max": 11.5,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 46,
@@ -502,8 +592,10 @@
     "page": 31,
     "pos": "top",
     "file": "diagram_46.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.3,
+    "si_max": 13.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 47,
@@ -513,8 +605,10 @@
     "page": 32,
     "pos": "top",
     "file": "diagram_47.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.3,
+    "si_max": 14.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 48,
@@ -525,7 +619,9 @@
     "pos": "top",
     "file": "diagram_48.png",
     "al_max": 1.4,
-    "si_max": 14.0
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 49,
@@ -535,8 +631,10 @@
     "page": 34,
     "pos": "top",
     "file": "diagram_49.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.2,
+    "si_max": 14.0,
+    "si_min": 0.5,
+    "al_min": 0.0
   },
   {
     "n": 50,
@@ -546,8 +644,10 @@
     "page": 35,
     "pos": "top",
     "file": "diagram_50.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.0,
+    "si_max": 12.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 51,
@@ -557,8 +657,10 @@
     "page": 36,
     "pos": "top",
     "file": "diagram_51.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.3,
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 52,
@@ -569,7 +671,9 @@
     "pos": "top",
     "file": "diagram_52.png",
     "al_max": 1.4,
-    "si_max": 14.0
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 53,
@@ -580,7 +684,9 @@
     "pos": "top",
     "file": "diagram_53.png",
     "al_max": 1.4,
-    "si_max": 14.0
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 54,
@@ -590,8 +696,10 @@
     "page": 39,
     "pos": "top",
     "file": "diagram_54.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.3,
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 55,
@@ -602,7 +710,9 @@
     "pos": "top",
     "file": "diagram_55.png",
     "al_max": 1.4,
-    "si_max": 14.0
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 56,
@@ -613,7 +723,9 @@
     "pos": "top",
     "file": "diagram_56.png",
     "al_max": 1.4,
-    "si_max": 14.0
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 57,
@@ -624,7 +736,9 @@
     "pos": "top",
     "file": "diagram_57.png",
     "al_max": 1.4,
-    "si_max": 14.0
+    "si_max": 16.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 58,
@@ -634,8 +748,10 @@
     "page": 43,
     "pos": "top",
     "file": "diagram_58.png",
-    "al_max": 1.4,
-    "si_max": 14.0
+    "al_max": 1.6,
+    "si_max": 18.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 59,
@@ -645,8 +761,10 @@
     "page": 44,
     "pos": "top",
     "file": "diagram_59.png",
-    "al_max": 1.6,
-    "si_max": 8.0
+    "al_max": 1.5,
+    "si_max": 18.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   },
   {
     "n": 60,
@@ -657,6 +775,8 @@
     "pos": "top",
     "file": "diagram_60.png",
     "al_max": 1.6,
-    "si_max": 18.0
+    "si_max": 18.0,
+    "si_min": 0.0,
+    "al_min": 0.0
   }
 ]
