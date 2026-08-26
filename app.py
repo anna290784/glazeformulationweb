@@ -50,9 +50,15 @@ if "status" not in st.session_state:
 
 
 def _parse_num(raw, lo=0.0, hi=5000.0):
-    s = str(raw if raw is not None else "0").strip().replace(",", ".")
-    if s in ("", ".", "-"):
+    s = str(raw if raw is not None else "0").strip().replace(" ", "").replace(",", ".")
+    if s in ("", ".", "-", "+", "+.", "-."):
         return 0.0
+    if s.startswith("."):
+        s = "0" + s
+    elif s.startswith("-."):
+        s = "-0" + s[1:]
+    elif s.startswith("+."):
+        s = "+0" + s[1:]
     try:
         v = float(s)
     except ValueError:
@@ -101,13 +107,29 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 #MainMenu, footer, header { visibility: hidden; height: 0; }
 [data-testid="stImage"] button,
 [data-testid="stPyplot"] button { display: none !important; }
+[data-testid="stHorizontalBlock"]:first-of-type [data-testid="stElementToolbar"] {
+    display: none !important;
+}
 [data-testid="stPyplot"] {
     max-width: 320px !important;
 }
-[data-testid="stPyplot"] img {
+[data-testid="stPyplot"] img,
+[data-testid="stColumn"]:last-child [data-testid="stImage"] img {
     max-width: 320px !important;
     width: 320px !important;
     height: auto !important;
+}
+[data-testid="stColumn"]:last-child [data-testid="stFullScreenFrame"]:has([data-testid="stImage"]) {
+    padding-bottom: 40px !important;
+}
+[data-testid="stColumn"]:last-child [data-testid="stFullScreenFrame"]:has([data-testid="stImage"]) [data-testid="stElementToolbar"] {
+    display: flex !important;
+    top: 100% !important;
+    bottom: auto !important;
+    right: 0 !important;
+    margin-top: 8px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
 }
 [data-testid="stToolbar"] { display: none !important; }
 .stDeployButton, [data-testid="stStatusWidget"] { display: none !important; }
@@ -705,13 +727,27 @@ components.html(
   function isZero(raw) {
     const s = String(raw || "").trim().replace(",", ".");
     if (s === "" || s === "." || s === "-") return false;
-    const n = Number(s);
+    const n = Number(s.charAt(0) === "." ? "0" + s : s);
     return Number.isFinite(n) && n === 0;
+  }
+  function leadingDotToZero(raw) {
+    let s = String(raw || "").trim().replace(" ", "").replace(",", ".");
+    if (/^[+-]?\\.\\d/.test(s)) s = s.replace(/^([+-]?)\\./, "$10.");
+    return s;
   }
   function makeNumericKeyboard(el) {
     el.setAttribute("inputmode", "decimal");
     el.setAttribute("enterkeyhint", "done");
     el.setAttribute("autocomplete", "off");
+  }
+  function commitValue(el, value) {
+    if (el.value === value) return;
+    const proto = Object.getPrototypeOf(el);
+    const desc = proto && Object.getOwnPropertyDescriptor(proto, "value");
+    if (desc && desc.set) desc.set.call(el, value);
+    else el.value = value;
+    el.dispatchEvent(new Event("input", {bubbles: true}));
+    el.dispatchEvent(new Event("change", {bubbles: true}));
   }
   function bind(el) {
     makeNumericKeyboard(el);
@@ -728,6 +764,10 @@ components.html(
       } else if (el.value) {
         try { el.select(); } catch (err) {}
       }
+    }, true);
+    el.addEventListener("blur", function () {
+      const n = leadingDotToZero(el.value);
+      if (n !== String(el.value || "").trim()) commitValue(el, n);
     }, true);
   }
   function hidePwaWarning() {

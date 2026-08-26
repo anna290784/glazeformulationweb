@@ -22,6 +22,8 @@ _ZONE_REF = None
 _DANIEL_VIEW_STD = {"al_max": 1.0, "si_max": 8.5, "si_min": 0.0, "al_min": 0.0}
 _DANIEL_VIEW_OVERRIDES = {n: dict(_DANIEL_VIEW_STD) for n in range(1, 61)}
 FREER_ZONES_MANUAL: dict[int, list] = {}
+# Come Glaze AI: questi diagrammi restano a vertici calibrati, senza densificazione.
+_SIMPLE_CONTOUR = {1, 14, 21, 25, 26, 31, 34, 37, 38, 44, 45, 50, 54, 60}
 
 
 def _load_calibration():
@@ -357,7 +359,7 @@ def carica_zona(meta):
 
     def _finalize(zone):
         zone = [_clip_pt(al, si, al_max, si_max) for al, si in zone]
-        if n in (1, 21):
+        if n in _SIMPLE_CONTOUR:
             return zone
         return _densify_ring(zone, steps=10)
 

@@ -320,7 +320,7 @@
     "pos": "bottom",
     "file": "diagram_25.png",
     "al_max": 1.0,
-    "si_max": 8.5,
+    "si_max": 9.0,
     "si_min": 0.0,
     "al_min": 0.0
   },
@@ -332,8 +332,8 @@
     "page": 15,
     "pos": "top",
     "file": "diagram_26.png",
-    "al_max": 1.0,
-    "si_max": 8.5,
+    "al_max": 1.1,
+    "si_max": 9.0,
     "si_min": 0.0,
     "al_min": 0.0
   },
@@ -437,8 +437,8 @@
     "pos": "top",
     "file": "diagram_34.png",
     "al_max": 1.1,
-    "si_max": 11.5,
-    "si_min": 0.5,
+    "si_max": 11.0,
+    "si_min": 0.0,
     "al_min": 0.0
   },
   {
@@ -477,7 +477,7 @@
     "file": "diagram_37.png",
     "al_max": 1.1,
     "si_max": 9.0,
-    "si_min": 0.5,
+    "si_min": 0.0,
     "al_min": 0.0
   },
   {
@@ -490,7 +490,7 @@
     "file": "diagram_38.png",
     "al_max": 1.0,
     "si_max": 9.0,
-    "si_min": 0.5,
+    "si_min": 0.0,
     "al_min": 0.0
   },
   {
@@ -566,7 +566,7 @@
     "page": 29,
     "pos": "top",
     "file": "diagram_44.png",
-    "al_max": 1.0,
+    "al_max": 1.1,
     "si_max": 10.0,
     "si_min": 0.0,
     "al_min": 0.0
@@ -580,7 +580,7 @@
     "pos": "top",
     "file": "diagram_45.png",
     "al_max": 1.0,
-    "si_max": 11.5,
+    "si_max": 11.0,
     "si_min": 0.0,
     "al_min": 0.0
   },
