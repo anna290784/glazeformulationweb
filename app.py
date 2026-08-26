@@ -106,8 +106,11 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 [data-testid="stToolbar"], [data-testid="stDecoration"],
 #MainMenu, footer, header { visibility: hidden; height: 0; }
 [data-testid="stImage"] button,
-[data-testid="stPyplot"] button { display: none !important; }
-[data-testid="stHorizontalBlock"]:first-of-type [data-testid="stElementToolbar"] {
+[data-testid="stPyplot"] button,
+button[aria-label="Fullscreen"] { display: none !important; }
+[data-testid="stHorizontalBlock"]:first-of-type [data-testid="stElementToolbar"],
+[data-testid="stFullScreenFrame"]:has([data-testid="stImage"]) [data-testid="stElementToolbar"],
+[data-testid="stFullScreenFrame"]:has([data-testid="stPyplot"]) [data-testid="stElementToolbar"] {
     display: none !important;
 }
 [data-testid="stPyplot"] {
@@ -118,18 +121,6 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     max-width: 320px !important;
     width: 320px !important;
     height: auto !important;
-}
-[data-testid="stColumn"]:last-child [data-testid="stFullScreenFrame"]:has([data-testid="stImage"]) {
-    padding-bottom: 40px !important;
-}
-[data-testid="stColumn"]:last-child [data-testid="stFullScreenFrame"]:has([data-testid="stImage"]) [data-testid="stElementToolbar"] {
-    display: flex !important;
-    top: 100% !important;
-    bottom: auto !important;
-    right: 0 !important;
-    margin-top: 8px !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
 }
 [data-testid="stToolbar"] { display: none !important; }
 .stDeployButton, [data-testid="stStatusWidget"] { display: none !important; }
